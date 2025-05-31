@@ -139,7 +139,7 @@ func listGenre() {
 }
 
 // SELECTION SORT skor descending
-func selectionSortByScoreDesc() {
+func urutDataSkor() {
 	for i := 0; i < MAX-1; i++ {
 		maxIdx := i
 		for j := i + 1; j < MAX; j++ {
@@ -152,7 +152,7 @@ func selectionSortByScoreDesc() {
 }
 
 // INSERTION SORT judul ascending
-func insertionSortByTitleAsc() {
+func urutAbjad() {
 	for i := 1; i < MAX; i++ {
 		temp := novelList[i]
 		j := i - 1
@@ -165,7 +165,7 @@ func insertionSortByTitleAsc() {
 }
 
 // SEQUENTIAL SEARCH berdasarkan judul
-func sequentialSearch(title string) {
+func cariJudul(title string) {
 	found := false
 	for i := 0; i < MAX; i++ {
 		// kalau input kosong, skip
@@ -173,7 +173,8 @@ func sequentialSearch(title string) {
 		}
 		// pakai Contains biar bisa cari yang mengandung kata input
 		if strings.Contains(strings.ToLower(novelList[i].Title), strings.ToLower(title)) {
-			fmt.Printf("%s, Skor: %.1f\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value)
+			fmt.Printf("%d. %s (Skor: %.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[novelList[i].ID].Value)
+
 			found = true
 		}
 	}
@@ -182,7 +183,7 @@ func sequentialSearch(title string) {
 	}
 }
 
-func insertionSortScoreAsc() {
+func bantuCariSkor() {
 	for i := 1; i < MAX; i++ {
 		temp := scoreList[i]
 		j := i - 1
@@ -194,8 +195,8 @@ func insertionSortScoreAsc() {
 	}
 }
 
-func binarySearchScore(target float64) {
-	insertionSortScoreAsc()
+func cariSkor(target float64) {
+	bantuCariSkor()
 
 	left, right := 0, MAX-1
 	found := false
@@ -207,13 +208,15 @@ func binarySearchScore(target float64) {
 			// Ketemu, langsung scan kiri-kanan dari mid
 			i := mid
 			for i >= 0 && scoreList[i].Value == target {
-				fmt.Printf("%s, Skor: %.1f\n", scoreList[i].ID, novelList[scoreList[i].ID].Title, scoreList[i].Value)
+				fmt.Printf("%d. %s (Skor: %.1f)\n", scoreList[i].ID, novelList[scoreList[i].ID].Title, scoreList[i].Value)
+
 				i--
 				found = true
 			}
 			j := mid + 1
 			for j < MAX && scoreList[j].Value == target {
-				fmt.Printf("%s, Skor: %.1f\n", scoreList[j].ID, novelList[scoreList[j].ID].Title, scoreList[j].Value)
+				fmt.Printf("%d. %s (Skor: %.1f)\n", scoreList[j].ID, novelList[scoreList[j].ID].Title, scoreList[j].Value)
+
 				j++
 				found = true
 			}
@@ -231,7 +234,7 @@ func binarySearchScore(target float64) {
 	}
 }
 
-func printNovelList() {
+func tampilNovelList() {
 	for i := 0; i < MAX; i++ {
 		fmt.Printf("%d. %s (%.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value)
 	}
@@ -254,25 +257,25 @@ func main() {
 
 		switch pilihan {
 		case 1:
-			printNovelList()
+			tampilNovelList()
 		case 2:
-			selectionSortByScoreDesc()
+			urutDataSkor()
 			fmt.Println("Novel terbaik berdasarkan rating: ")
-			printNovelList()
+			tampilNovelList()
 		case 3:
-			insertionSortByTitleAsc()
+			urutAbjad()
 			fmt.Println("List Novel:")
-			printNovelList()
+			tampilNovelList()
 		case 4:
 			var inputTitle string
 			fmt.Print("Masukkan keyword judul: ")
 			fmt.Scan(&inputTitle)
-			sequentialSearch(inputTitle)
+			cariJudul(inputTitle)
 		case 5:
 			var targetScore float64
 			fmt.Print("Masukkan skor yang dicari: ")
 			fmt.Scan(&targetScore)
-			binarySearchScore(targetScore)
+			cariSkor(targetScore)
 		case 0:
 			fmt.Println("Terima kasih.")
 			return
