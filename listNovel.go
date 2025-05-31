@@ -22,11 +22,6 @@ type Genre struct {
 	Genres []string
 }
 
-type GenreCount struct {
-	Name  string
-	Count int
-}
-
 var novelList = [MAX]Novel{
 	{0, "Shadow Slave"},
 	{1, "Lord of the Mysteries"},
@@ -143,211 +138,146 @@ func listGenre() {
 	genreList[49] = Genre{ID: 49, Genres: []string{"Sci-fi", "Action", "Game-Elements"}}
 }
 
-func heapify(scores []Score, n, i int) {
-	largest := i
-	l := 2*i + 1
-	r := 2*i + 2
-	if l < n && scores[l].Value > scores[largest].Value {
-		largest = l
-	}
-	if r < n && scores[r].Value > scores[largest].Value {
-		largest = r
-	}
-	if largest != i {
-		scores[i], scores[largest] = scores[largest], scores[i]
-		heapify(scores, n, largest)
-	}
-}
-
-func urutSkor(scores []Score) {
-	n := len(scores)
-	for i := n/2 - 1; i >= 0; i-- {
-		heapify(scores, n, i)
-	}
-	for i := n - 1; i > 0; i-- {
-		scores[0], scores[i] = scores[i], scores[0]
-		heapify(scores, i, 0)
-	}
-}
-
-func genreTersedia() {
-	genreSet := make(map[string]bool)
-	for _, g := range genreList {
-		for _, gen := range g.Genres {
-			genreSet[gen] = true
-		}
-	}
-
-	fmt.Println("\nGenre yang tersedia:")
-	for gen := range genreSet {
-		fmt.Println("-", gen)
-	}
-}
-
-func tampilRank(scores []Score, rank int) {
-	if rank < 1 || rank > MAX {
-		fmt.Println("Informasi Tidak Tersedia")
-		return
-	}
-	index := MAX - rank
-	id := scores[index].ID
-	fmt.Printf("\nRanking #%d:\nJudul: %s\nSkor: %.2f\n", rank, novelList[id].Title, scores[index].Value)
-}
-
-func cariGenre(genreList []Genre, targetGenre string) {
-	fmt.Printf("\nNovel dengan genre '%s':\n", targetGenre)
-	for _, g := range genreList {
-		for _, gen := range g.Genres {
-			if strings.EqualFold(gen, targetGenre) {
-				fmt.Println(novelList[g.ID].Title)
-				break
+// SELECTION SORT skor descending
+func selectionSortByScoreDesc() {
+	for i := 0; i < MAX-1; i++ {
+		maxIdx := i
+		for j := i + 1; j < MAX; j++ {
+			if scoreList[j].Value > scoreList[maxIdx].Value {
+				maxIdx = j
 			}
 		}
+		scoreList[i], scoreList[maxIdx] = scoreList[maxIdx], scoreList[i]
 	}
 }
 
-func inputCariBerdasarkanGenre() {
-	var genreInput string
-	fmt.Print("\nMasukkan genre yang ingin dicari: ")
-	fmt.Scanln(&genreInput)
-	cariGenre(genreList[:], genreInput) 
-}
-
-func inputCariBerdasarkanRanking(scores []Score) {
-	var rankInput int
-	fmt.Print("\nMasukkan ranking yang ingin dilihat (1-50): ")
-	fmt.Scanln(&rankInput)
-	tampilRank(scores, rankInput)
-}
-
-func hitungGenre() []GenreCount {
-	countMap := make(map[string]int)
-	for _, g := range genreList {
-		for _, gen := range g.Genres {
-			countMap[gen]++
+// INSERTION SORT judul ascending
+func insertionSortByTitleAsc() {
+	for i := 1; i < MAX; i++ {
+		temp := novelList[i]
+		j := i - 1
+		for j >= 0 && strings.ToLower(novelList[j].Title) > strings.ToLower(temp.Title) {
+			novelList[j+1] = novelList[j]
+			j--
 		}
-	}
-	genreCounts := make([]GenreCount, 0, len(countMap))
-	for gen, c := range countMap {
-		genreCounts = append(genreCounts, GenreCount{Name: gen, Count: c})
-	}
-	return genreCounts
-}
-
-func urutHitungGenre(arr []GenreCount, exp int) {
-	n := len(arr)
-	output := make([]GenreCount, n)
-	count := make([]int, 10)
-
-	for i := 0; i < n; i++ {
-		digit := (arr[i].Count / exp) % 10
-		count[digit]++
-	}
-	for i := 1; i < 10; i++ {
-		count[i] += count[i-1]
-	}
-	for i := n - 1; i >= 0; i-- {
-		digit := (arr[i].Count / exp) % 10
-		output[count[digit]-1] = arr[i]
-		count[digit]--
-	}
-	for i := 0; i < n; i++ {
-		arr[i] = output[i]
+		novelList[j+1] = temp
 	}
 }
 
-func urutJumlahGenre(arr []GenreCount) {
-	max := 0
-	for _, v := range arr {
-		if v.Count > max {
-			max = v.Count
-		}
-	}
-	for exp := 1; max/exp > 0; exp *= 10 {
-		urutHitungGenre(arr, exp)
-	}
-}
-
-func cetakJumlahGenre() {
-	genreCounts := hitungGenre()
-	urutJumlahGenre(genreCounts)
-
-	fmt.Println("\nGenre paling banyak tersedia:")
-	for _, gc := range genreCounts {
-		fmt.Printf("%s: %d\n", gc.Name, gc.Count)
-	}
-}
-
-func filterHurufAwal(letter string) {
-	fmt.Printf("\nNovel yang judulnya diawali huruf '%s':\n", strings.ToUpper(letter))
+// SEQUENTIAL SEARCH berdasarkan judul
+func sequentialSearch(title string) {
 	found := false
-	for _, novel := range novelList {
-		if strings.HasPrefix(strings.ToUpper(novel.Title), strings.ToUpper(letter)) {
-			fmt.Println("-", novel.Title)
+	for i := 0; i < MAX; i++ {
+		// kalau input kosong, skip
+		if title == "" {
+		}
+		// pakai Contains biar bisa cari yang mengandung kata input
+		if strings.Contains(strings.ToLower(novelList[i].Title), strings.ToLower(title)) {
+			fmt.Printf("%s, Skor: %.1f\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value)
 			found = true
 		}
 	}
 	if !found {
-		fmt.Println("Tidak ada novel yang ditemukan dengan huruf tersebut.")
+		fmt.Println("Novel tidak ditemukan.")
 	}
 }
 
-func inputCariBerdasarkanHurufDepan() {
-	var hurufInput string
-	fmt.Print("\nMasukkan huruf awal judul yang ingin dicari: ")
-	fmt.Scanln(&hurufInput)
-	if len(hurufInput) != 1 {
-		fmt.Println("Mohon masukkan 1 huruf saja.")
-		return
+func insertionSortScoreAsc() {
+	for i := 1; i < MAX; i++ {
+		temp := scoreList[i]
+		j := i - 1
+		for j >= 0 && scoreList[j].Value > temp.Value {
+			scoreList[j+1] = scoreList[j]
+			j--
+		}
+		scoreList[j+1] = temp
 	}
-	filterHurufAwal(hurufInput)
+}
+
+func binarySearchScore(target float64) {
+	insertionSortScoreAsc()
+
+	left, right := 0, MAX-1
+	found := false
+
+	for left <= right && !found {
+		mid := (left + right) / 2
+
+		if scoreList[mid].Value == target {
+			// Ketemu, langsung scan kiri-kanan dari mid
+			i := mid
+			for i >= 0 && scoreList[i].Value == target {
+				fmt.Printf("%s, Skor: %.1f\n", scoreList[i].ID, novelList[scoreList[i].ID].Title, scoreList[i].Value)
+				i--
+				found = true
+			}
+			j := mid + 1
+			for j < MAX && scoreList[j].Value == target {
+				fmt.Printf("%s, Skor: %.1f\n", scoreList[j].ID, novelList[scoreList[j].ID].Title, scoreList[j].Value)
+				j++
+				found = true
+			}
+			
+			left = right + 1
+		} else if scoreList[mid].Value < target {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+
+	if !found {
+		fmt.Println("Skor tidak ditemukan.")
+	}
+}
+
+func printNovelList() {
+	for i := 0; i < MAX; i++ {
+		fmt.Printf("%d. %s (%.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value)
+	}
 }
 
 func main() {
 	listGenre()
-	urutSkor(scoreList[:])
 
+	var pilihan int
 	for {
-		fmt.Println("\n========= MENU UTAMA =========")
-		fmt.Println("1. Tampilkan semua judul novel")
-		fmt.Println("2. Tampilkan genre yang tersedia")
-		fmt.Println("3. Cari novel berdasarkan genre")
-		fmt.Println("4. Cari novel berdasarkan huruf awal")
-		fmt.Println("5. Tampilkan genre yang paling populer")
-		fmt.Println("6. Tampilkan 5 novel dengan skor tertinggi")
-		fmt.Println("7. Lihat novel berdasarkan ranking")
+		fmt.Println("\n===== MENU =====")
+		fmt.Println("1. Tampilkan Data")
+		fmt.Println("2. Novel terbaik berdasarkan rating")
+		fmt.Println("3. Novel berdasarkan abjad")
+		fmt.Println("4. Cari Judul ")
+		fmt.Println("5. Cari Skor ")
 		fmt.Println("0. Keluar")
-		fmt.Print("Pilihan Anda: ")
-
-		var pilihan int
-		fmt.Scanln(&pilihan)
+		fmt.Print("Pilih: ")
+		fmt.Scan(&pilihan)
 
 		switch pilihan {
 		case 1:
-			fmt.Println("\nDaftar Semua Judul Novel:")
-			for _, novel := range novelList {
-				fmt.Printf("- %s\n", novel.Title)
-			}
+			printNovelList()
 		case 2:
-			genreTersedia()
+			selectionSortByScoreDesc()
+			fmt.Println("Novel terbaik berdasarkan rating: ")
+			printNovelList()
 		case 3:
-			inputCariBerdasarkanGenre()
+			insertionSortByTitleAsc()
+			fmt.Println("List Novel:")
+			printNovelList()
 		case 4:
-			inputCariBerdasarkanHurufDepan()
+			var inputTitle string
+			fmt.Print("Masukkan keyword judul: ")
+			fmt.Scan(&inputTitle)
+			sequentialSearch(inputTitle)
 		case 5:
-			cetakJumlahGenre()
-		case 6:
-			fmt.Println("\nTop 5 Novel berdasarkan Skor:")
-			for i := MAX - 1; i >= MAX-5; i-- {
-				fmt.Printf("%s: %.2f\n", novelList[scoreList[i].ID].Title, scoreList[i].Value)
-			}
-		case 7:
-			inputCariBerdasarkanRanking(scoreList[:])
+			var targetScore float64
+			fmt.Print("Masukkan skor yang dicari: ")
+			fmt.Scan(&targetScore)
+			binarySearchScore(targetScore)
 		case 0:
-			fmt.Println("Terima kasih telah menggunakan aplikasi.")
+			fmt.Println("Terima kasih.")
 			return
 		default:
-			fmt.Println("Pilihan tidak valid, silakan coba lagi.")
+			fmt.Println("Pilihan tidak valid.")
 		}
 	}
 }
