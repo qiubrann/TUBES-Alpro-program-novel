@@ -19,7 +19,7 @@ type Score struct {
 
 type Genre struct {
 	ID     int
-	Genres []string
+	Genres string
 }
 
 var novelList = [MAX]Novel{
@@ -83,62 +83,60 @@ var scoreList = [MAX]Score{
 	{40, 4.3}, {41, 4.3}, {42, 4.3}, {43, 4.3}, {44, 4.3}, {45, 4.2}, {46, 4.2}, {47, 4.2}, {48, 4.2}, {49, 4.2},
 }
 
-var genreList = [MAX]Genre{}
-
-func listGenre() {
-	genreList[0] = Genre{ID: 0, Genres: []string{"Action", "Dark-Fantasy", "Adventure"}}
-	genreList[1] = Genre{ID: 1, Genres: []string{"Mystery", "Supernatural", "Dark-Fantasy"}}
-	genreList[2] = Genre{ID: 2, Genres: []string{"Dark-Fantasy", "Psychological", "Cultivation"}}
-	genreList[3] = Genre{ID: 3, Genres: []string{"Fantasy", "Isekai", "Action"}}
-	genreList[4] = Genre{ID: 4, Genres: []string{"Post-Apocalypse", "Action", "Tragedy"}}
-	genreList[5] = Genre{ID: 5, Genres: []string{"Fantasy", "Comedy", "Reincarnation"}}
-	genreList[6] = Genre{ID: 6, Genres: []string{"Sci-fi", "Action", "Reincarnation"}}
-	genreList[7] = Genre{ID: 7, Genres: []string{"Cultivation", "Regression", "Fantasy"}}
-	genreList[8] = Genre{ID: 8, Genres: []string{"Fantasy", "Action", "Slice-of-Life"}}
-	genreList[9] = Genre{ID: 9, Genres: []string{"Fantasy", "Villain-MC", "Drama"}}
-	genreList[10] = Genre{ID: 10, Genres: []string{"Martial-Arts", "Revenge", "Fantasy"}}
-	genreList[11] = Genre{ID: 11, Genres: []string{"Horror", "Mystery", "Supernatural"}}
-	genreList[12] = Genre{ID: 12, Genres: []string{"Fantasy", "Magic", "Action"}}
-	genreList[13] = Genre{ID: 13, Genres: []string{"Fantasy", "Adventure", "Tragedy"}}
-	genreList[14] = Genre{ID: 14, Genres: []string{"Fantasy", "Action", "Isekai"}}
-	genreList[15] = Genre{ID: 15, Genres: []string{"Fantasy", "Post-Apocalypse", "Adventure"}}
-	genreList[16] = Genre{ID: 16, Genres: []string{"Fantasy", "Reincarnation", "Action"}}
-	genreList[17] = Genre{ID: 17, Genres: []string{"Action", "Dungeon", "Fantasy"}}
-	genreList[18] = Genre{ID: 18, Genres: []string{"Fantasy", "Isekai", "Action"}}
-	genreList[19] = Genre{ID: 19, Genres: []string{"Fantasy", "Political", "Drama"}}
-	genreList[20] = Genre{ID: 20, Genres: []string{"Mystery", "Supernatural", "Fantasy"}}
-	genreList[21] = Genre{ID: 21, Genres: []string{"Cultivation", "Action", "Revenge"}}
-	genreList[22] = Genre{ID: 22, Genres: []string{"Fantasy", "Regression", "Action"}}
-	genreList[23] = Genre{ID: 23, Genres: []string{"Fantasy", "Drama", "Action"}}
-	genreList[24] = Genre{ID: 24, Genres: []string{"Fantasy", "Villain-MC", "Sci-fi"}}
-	genreList[25] = Genre{ID: 25, Genres: []string{"Fantasy", "Game-Elements", "Isekai"}}
-	genreList[26] = Genre{ID: 26, Genres: []string{"Fantasy", "Action", "Revenge"}}
-	genreList[27] = Genre{ID: 27, Genres: []string{"Fantasy", "Cultivation", "Comedy"}}
-	genreList[28] = Genre{ID: 28, Genres: []string{"Fantasy", "Comedy", "Kingdom-Building"}}
-	genreList[29] = Genre{ID: 29, Genres: []string{"Sci-fi", "Action", "Isekai"}}
-	genreList[30] = Genre{ID: 30, Genres: []string{"Fantasy", "Isekai", "Action"}}
-	genreList[31] = Genre{ID: 31, Genres: []string{"Fantasy", "Isekai", "Psychological"}}
-	genreList[32] = Genre{ID: 32, Genres: []string{"Fantasy", "Dungeon", "Revenge"}}
-	genreList[33] = Genre{ID: 33, Genres: []string{"Fantasy", "Regression", "Action"}}
-	genreList[34] = Genre{ID: 34, Genres: []string{"Comedy", "Magic", "Action"}}
-	genreList[35] = Genre{ID: 35, Genres: []string{"Fantasy", "Dungeon", "Revenge"}}
-	genreList[36] = Genre{ID: 36, Genres: []string{"Fantasy", "Magic", "Adventure"}}
-	genreList[37] = Genre{ID: 37, Genres: []string{"Comedy", "Villain-MC", "Fantasy", "Urban-Fantasy"}}
-	genreList[38] = Genre{ID: 38, Genres: []string{"Fantasy", "Drama", "Political"}}
-	genreList[39] = Genre{ID: 39, Genres: []string{"Fantasy", "Magic", "Kingdom-Building"}}
-	genreList[40] = Genre{ID: 40, Genres: []string{"Martial-Arts", "Action", "Comedy"}}
-	genreList[41] = Genre{ID: 41, Genres: []string{"Fantasy", "Survival", "Action"}}
-	genreList[42] = Genre{ID: 42, Genres: []string{"Fantasy", "Villain-MC", "Reincarnation"}}
-	genreList[43] = Genre{ID: 43, Genres: []string{"Cultivation", "Slice-of-Life", "Comedy"}}
-	genreList[44] = Genre{ID: 44, Genres: []string{"Sci-fi", "Villain-MC", "Comedy"}}
-	genreList[45] = Genre{ID: 45, Genres: []string{"Fantasy", "Romance", "Comedy"}}
-	genreList[46] = Genre{ID: 46, Genres: []string{"Fantasy", "Adventure", "Romance"}}
-	genreList[47] = Genre{ID: 47, Genres: []string{"Fantasy", "Comedy", "Action"}}
-	genreList[48] = Genre{ID: 48, Genres: []string{"Dark-Fantasy", "Villain-MC", "Psychological"}}
-	genreList[49] = Genre{ID: 49, Genres: []string{"Sci-fi", "Action", "Game-Elements"}}
+var genreList = [MAX]Genre{
+	{0, "Action, Dark-Fantasy, Adventure"},
+	{1, "Mystery, Supernatural, Dark-Fantasy"},
+	{2, "Dark-Fantasy, Psychological, Cultivation"},
+	{3, "Fantasy, Isekai, Action"},
+	{4, "Post-Apocalypse, Action, Tragedy"},
+	{5, "Fantasy, Comedy, Reincarnation"},
+	{6, "Sci-fi, Action, Reincarnation"},
+	{7, "Cultivation, Regression, Fantasy"},
+	{8, "Fantasy, Action, Slice-of-Life"},
+	{9, "Fantasy, Villain-MC, Drama"},
+	{10, "Martial-Arts, Revenge, Fantasy"},
+	{11, "Horror, Mystery, Supernatural"},
+	{12, "Fantasy, Magic, Action"},
+	{13, "Fantasy, Adventure, Tragedy"},
+	{14, "Fantasy, Action, Isekai"},
+	{15, "Fantasy, Post-Apocalypse, Adventure"},
+	{16, "Fantasy, Reincarnation, Action"},
+	{17, "Action, Dungeon, Fantasy"},
+	{18, "Fantasy, Isekai, Action"},
+	{19, "Fantasy, Political, Drama"},
+	{20, "Mystery, Supernatural, Fantasy"},
+	{21, "Cultivation, Action, Revenge"},
+	{22, "Fantasy, Regression, Action"},
+	{23, "Fantasy, Drama, Action"},
+	{24, "Fantasy, Villain-MC, Sci-fi"},
+	{25, "Fantasy, Game-Elements, Isekai"},
+	{26, "Fantasy, Action, Revenge"},
+	{27, "Fantasy, Cultivation, Comedy"},
+	{28, "Fantasy, Comedy, Kingdom-Building"},
+	{29, "Sci-fi, Action, Isekai"},
+	{30, "Fantasy, Isekai, Action"},
+	{31, "Fantasy, Isekai, Psychological"},
+	{32, "Fantasy, Dungeon, Revenge"},
+	{33, "Fantasy, Regression, Action"},
+	{34, "Comedy, Magic, Action"},
+	{35, "Fantasy, Dungeon, Revenge"},
+	{36, "Fantasy, Magic, Adventure"},
+	{37, "Comedy, Villain-MC, Fantasy, Urban-Fantasy"},
+	{38, "Fantasy, Drama, Political"},
+	{39, "Fantasy, Magic, Kingdom-Building"},
+	{40, "Martial-Arts, Action, Comedy"},
+	{41, "Fantasy, Survival, Action"},
+	{42, "Fantasy, Villain-MC, Reincarnation"},
+	{43, "Cultivation, Slice-of-Life, Comedy"},
+	{44, "Sci-fi, Villain-MC, Comedy"},
+	{45, "Fantasy, Romance, Comedy"},
+	{46, "Fantasy, Adventure, Romance"},
+	{47, "Fantasy, Comedy, Action"},
+	{48, "Dark-Fantasy, Villain-MC, Psychological"},
+	{49, "Sci-fi, Action, Game-Elements"},
 }
 
-// SELECTION SORT skor descending
+// Sort skor descending (selection sort)
 func urutDataSkor() {
 	for i := 0; i < MAX-1; i++ {
 		maxIdx := i
@@ -151,7 +149,7 @@ func urutDataSkor() {
 	}
 }
 
-// INSERTION SORT judul ascending
+// Sort judul ascending (insertion sort)
 func urutAbjad() {
 	for i := 1; i < MAX; i++ {
 		temp := novelList[i]
@@ -164,17 +162,12 @@ func urutAbjad() {
 	}
 }
 
-// SEQUENTIAL SEARCH berdasarkan judul
+// Cari judul berdasarkan keyword (sequential search)
 func cariJudul(title string) {
 	found := false
 	for i := 0; i < MAX; i++ {
-		// kalau input kosong, skip
-		if title == "" {
-		}
-		// pakai Contains biar bisa cari yang mengandung kata input
 		if strings.Contains(strings.ToLower(novelList[i].Title), strings.ToLower(title)) {
 			fmt.Printf("%d. %s (Skor: %.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[novelList[i].ID].Value)
-
 			found = true
 		}
 	}
@@ -183,6 +176,7 @@ func cariJudul(title string) {
 	}
 }
 
+// Bantu sort skor ascending untuk binary search
 func bantuCariSkor() {
 	for i := 1; i < MAX; i++ {
 		temp := scoreList[i]
@@ -195,32 +189,23 @@ func bantuCariSkor() {
 	}
 }
 
+// Binary search skor
 func cariSkor(target float64) {
 	bantuCariSkor()
-
 	left, right := 0, MAX-1
 	found := false
 
 	for left <= right && !found {
 		mid := (left + right) / 2
-
 		if scoreList[mid].Value == target {
-			// Ketemu, langsung scan kiri-kanan dari mid
-			i := mid
-			for i >= 0 && scoreList[i].Value == target {
+			for i := mid; i >= 0 && scoreList[i].Value == target; i-- {
 				fmt.Printf("%d. %s (Skor: %.1f)\n", scoreList[i].ID, novelList[scoreList[i].ID].Title, scoreList[i].Value)
-
-				i--
 				found = true
 			}
-			j := mid + 1
-			for j < MAX && scoreList[j].Value == target {
+			for j := mid + 1; j < MAX && scoreList[j].Value == target; j++ {
 				fmt.Printf("%d. %s (Skor: %.1f)\n", scoreList[j].ID, novelList[scoreList[j].ID].Title, scoreList[j].Value)
-
-				j++
 				found = true
 			}
-			
 			left = right + 1
 		} else if scoreList[mid].Value < target {
 			left = mid + 1
@@ -228,20 +213,45 @@ func cariSkor(target float64) {
 			right = mid - 1
 		}
 	}
-
 	if !found {
 		fmt.Println("Skor tidak ditemukan.")
 	}
 }
 
+// Tampilkan semua novel
 func tampilNovelList() {
 	for i := 0; i < MAX; i++ {
-		fmt.Printf("%d. %s (%.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value)
+		fmt.Printf("%d. %s (%.1f) | Genre: %v\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value, genreList[i].Genres)
 	}
 }
 
+//cari berdasarkan genre
+func cariGenre(keyword string) {
+	keyword = strings.ToLower(keyword)
+	found := false
+
+	for i := 0; i < MAX; i++ {
+		genres := strings.Split(genreList[i].Genres, ", ")
+		foundInThisNovel := false
+
+		for _, g := range genres {
+			if strings.Contains(strings.ToLower(g), keyword) {
+				if !foundInThisNovel {
+					fmt.Printf("%d. %s (Skor: %.1f) | Genre: %v\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value, genreList[i].Genres)
+					foundInThisNovel = true
+					found = true
+				}
+			}
+		}
+	}
+
+	if !found {
+		fmt.Println("Tidak ditemukan novel dengan genre tersebut.")
+	}
+}
+
+// Main menu
 func main() {
-	listGenre()
 
 	var pilihan int
 	for {
@@ -251,6 +261,7 @@ func main() {
 		fmt.Println("3. Novel berdasarkan abjad")
 		fmt.Println("4. Cari Judul ")
 		fmt.Println("5. Cari Skor ")
+		fmt.Println("6. Cari berdasarkan genre")
 		fmt.Println("0. Keluar")
 		fmt.Print("Pilih: ")
 		fmt.Scan(&pilihan)
@@ -260,7 +271,7 @@ func main() {
 			tampilNovelList()
 		case 2:
 			urutDataSkor()
-			fmt.Println("Novel terbaik berdasarkan rating: ")
+			fmt.Println("Novel terbaik berdasarkan rating:")
 			tampilNovelList()
 		case 3:
 			urutAbjad()
@@ -276,6 +287,11 @@ func main() {
 			fmt.Print("Masukkan skor yang dicari: ")
 			fmt.Scan(&targetScore)
 			cariSkor(targetScore)
+		case 6:
+			var inputGenre string
+			fmt.Print("Masukkan keyword genre: ")
+			fmt.Scan(&inputGenre)
+			cariGenre(inputGenre)
 		case 0:
 			fmt.Println("Terima kasih.")
 			return
