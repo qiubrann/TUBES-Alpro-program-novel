@@ -166,8 +166,8 @@ func urutAbjad() {
 func cariJudul(title string) {
 	found := false
 	for i := 0; i < MAX; i++ {
-		if strings.Contains(strings.ToLower(novelList[i].Title), strings.ToLower(title)) {
-			fmt.Printf("%d. %s (Skor: %.1f)\n", novelList[i].ID, novelList[i].Title, scoreList[novelList[i].ID].Value)
+		if strings.HasPrefix(strings.ToLower(novelList[i].Title), strings.ToLower(title)) {
+			fmt.Printf("%d. %s (%.1f) | Genre: %v\n", novelList[i].ID, novelList[i].Title, scoreList[i].Value, genreList[i].Genres)
 			found = true
 		}
 	}
@@ -225,7 +225,7 @@ func tampilNovelList() {
 	}
 }
 
-//cari berdasarkan genre
+// cari berdasarkan genre
 func cariGenre(keyword string) {
 	keyword = strings.ToLower(keyword)
 	found := false
@@ -244,7 +244,6 @@ func cariGenre(keyword string) {
 			}
 		}
 	}
-
 	if !found {
 		fmt.Println("Tidak ditemukan novel dengan genre tersebut.")
 	}
